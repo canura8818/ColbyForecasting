@@ -59,7 +59,7 @@ keep
 
 Of course, we can decide to ignore this advice, and pick which ever ones we want including keeping them all.
 
-Whatever selection of variables we decide to model with, we will save this listing to a file.  That way we can refer to it progammatically.  But that comes later.
+Whatever selection of variables we decide to model with, we will save this listing to a file.  That way we can refer to it programmatically, but that comes later.
 
 ## A closer look at the model input data
 

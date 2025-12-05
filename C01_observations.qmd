@@ -103,7 +103,7 @@ obs |>
   browse_obis()
 ```
 
-Eeek!  It's a carcas that washed up on shore!  We checked a number of others, and they are all carcases.  Is that a presence?  Is that what we model are modeling?  If not then we should filer those out.
+Eeek!  It's a carcass that washed up on shore!  We checked a number of others, and they are all carcasses.  Is that a presence?  Is that what we model are modeling?  If not then we should filter those out.
 
 ```{r obs_filter_countless_dead}
 obs = obs |>

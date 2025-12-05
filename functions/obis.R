@@ -60,7 +60,8 @@ fetch_obis = function(scientificname = "Mola mola",
   #'  Files are automatically named "genus_species.gpkg" or "genus.gpkg" as
   #'  appropriate for each request.
   #' @param crs the CRS for the data
-  
+  #' @return spatial table of observations
+  #'  
   geometry = if(is.null(bb)){
     NULL
   } else {
