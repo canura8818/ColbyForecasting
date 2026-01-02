@@ -24,7 +24,7 @@ Meeting times: Mon, Tues and Thurs 1:00-4:00 pm
 Virtual (zoom) office hours by appointment - just contact [Ben
 Tupper](mailto:btupper@bigelow.org)
 
-Location: Miller 205
+Location: Diamond 341
 
 ## Handy links
 
