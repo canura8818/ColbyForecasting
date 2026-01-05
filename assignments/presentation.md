@@ -1,6 +1,6 @@
 # Presentation
 
-Monday, January 27
+Tuesday, January 27
 
 We will have a mini scientific conference where you will present your project as you might do at a scientific conference. Plan your presentation to be 10 minutes. You may use a slide show (e.g.power point), but you are also welcome to use other styles. You should aim at communicating a condensed version of what is in your project write-up. Because the project write-up isn’t due for a few more days, it is acceptable to have open-ended questions or areas where you ask the audience for feedback. At the end of the presentations, we will have a discussion that attempts to bring this collection of projects together into an integrated description of what the Gulf of Maine might look like in future decades.
 
