@@ -49,7 +49,7 @@ write_model_input = function(x,
                              path = data_path("model_input")){
   
   #' @rdname read_model_input
-  
+  path = make_path(path)
   spname = gsub(" ", "_", scientificname, fixed = TRUE)
   fname = if (is.null(version)){
     sprintf("%s-model_input.gpkg", spname)

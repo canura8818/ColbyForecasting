@@ -22,7 +22,7 @@ scrape_qmd = function(src = "C00_coding.qmd",
   if (!dir.exists(dirname(dst))) path = make_path(dirname(dst))
   
   x = readLines(src)
-  index = grep("```", x, fixed = TRUE)
+  index = grep("```{r", x, fixed = TRUE)
   if (length(index) > 0){
     start = seq(from = 1, to = length(index) - 1, by = 2)
     
