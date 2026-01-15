@@ -37,7 +37,7 @@ OK - load the data we need.
 
 ```{r load_obs_mask}
 coast = read_coastline()
-obs = read_observations(scientificname = "Mola mola")
+obs = read_observations(scientificname = "Dermochelys coriacea")
 db = brickman_database() |>
   filter(scenario == "STATIC", var == "mask")
 mask = read_brickman(db)
@@ -77,10 +77,11 @@ Thinning is the process we use to sub-sample observations so that they are more 
 
 ```{r thin_observations}
 thinned_obs = sapply(month.abb,
-               function(mon){ 
+               function(mon){
+                 temp_x = obs |> filter(month == mon)
+                 if(nrow(temp_x) == 0) return(NULL)
                  thin_by_cell(obs |> filter(month == mon), mask)
-               }, simplify = FALSE) |>
-  dplyr::bind_rows() 
+               }, simplify = FALSE) |> dplyr::bind_rows()
 
 # another count
 thinned_counts = count(st_drop_geometry(thinned_obs), month)
@@ -135,7 +136,9 @@ So, here we go.  We shall use the [`sapply` iterator](https://bigelowlab.github.
 
 ```{r sample_background}
 obsbkg = sapply(month.abb,
-    function(mon){ 
+    function(mon){
+      temp_x = obs |> filter(month == mon)
+      if(nrow(temp_x) == 0) return(NULL)
       sample_background(thinned_obs |> filter(month == mon), # <- just this month
                        bias_map,
                        method = "bias",  # <-- it needs to know it's a bias map
@@ -145,6 +148,14 @@ obsbkg = sapply(month.abb,
     }, simplify = FALSE) |>
   bind_rows() |>
   mutate(month = factor(month, levels = month.abb))
+
+thinned_obs = sapply(month.abb,
+               function(mon){
+                 temp_x = obs |> filter(month == mon)
+                 if(nrow(temp_x) == 0) return(NULL)
+                 thin_by_cell(obs |> filter(month == mon), mask)}, 
+               simplify = FALSE) |> dplyr::bind_rows()
+
 obsbkg 
 ```
 
