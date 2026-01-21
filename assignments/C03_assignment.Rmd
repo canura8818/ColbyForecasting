@@ -1,0 +1,102 @@
+---
+title: "Second Species"
+output: github_document
+---
+
+```{r setup}
+source("/home/canura26/ColbyForecasting/setup.R")
+for (f in list.files("/home/canura26/ColbyForecasting/functions",
+     pattern = glob2rx("*.R"), full.names = TRUE)){
+  source(f)
+}
+
+SPECIES = "Aurelia aurita"
+```
+
+```{r read_obs}
+obs = read_observations(SPECIES)
+obs
+```
+
+```{r background}
+db = brickman_database() |>
+  filter(scenario == "STATIC", var == "mask")
+mask = read_brickman(db)
+
+all_counts = count(st_drop_geometry(obs), month)
+
+thinned_obs = sapply(month.abb,
+                     function(mon){
+                       temp_x = obs |> filter(month == mon)
+                       if(nrow(temp_x) == 0) return(NULL)
+                       thin_by_cell(obs |> filter(month == mon), mask)
+                     }, simplify = FALSE) |> dplyr::bind_rows()
+
+# another count
+thinned_counts = count(st_drop_geometry(thinned_obs), month)
+
+bias_map = rasterize_point_density(obs, mask)
+
+# average background point count
+nback_avg = mean(all_counts$n) |> round()
+
+obsbkg = sapply(month.abb,
+                function(mon){
+                  temp_x = obs |> filter(month == mon)
+                  if(nrow(temp_x) == 0) return(NULL)
+                  sample_background(thinned_obs |> filter(month == mon), # <- just this month
+                                    bias_map,
+                                    method = "bias",  # <-- it needs to know it's a bias map
+                                    return_pres = TRUE, # <-- give me the obs back, too
+                                    n = nback_avg) |>   # <-- how many points
+                    mutate(month = mon, .before = 1)
+                }, simplify = FALSE) |>
+  bind_rows() |>
+  mutate(month = factor(month, levels = month.abb))
+
+write_model_input(obsbkg, scientificname = SPECIES)
+x = read_model_input(scientificname = SPECIES)
+```
+
+```{r read_brickman}
+db = brickman_database() |>
+  dplyr::filter(scenario == "PRESENT", interval == "mon")
+present = read_brickman(db)
+```
+
+```{r filter_collinear}
+keep = filter_collinear(present, method = "cor_caret", cutoff = 0.65)
+keep = c("depth", "month", keep)
+```
+
+```{r}
+model_input = read_model_input(scientificname = SPECIES)
+model_input
+```
+
+```{r reload_brickman}
+present = read_brickman(add = c("depth"))
+```
+
+```{r extract}
+variables = extract_brickman(present, model_input, form = "wide")
+variables
+```
+
+```{r make_config}
+cfg = list(
+  version = "v1",
+  scientificname = SPECIES,
+  background = "average of observations per month",
+  keep_vars =  keep)
+```
+
+```{r save config}
+ok = make_path(data_path("models")) # make a directory for models
+write_configuration(cfg)            
+```
+
+```{r save_input_data}
+write_model_input(variables, scientificname = SPECIES, version = "v1")
+```
+
