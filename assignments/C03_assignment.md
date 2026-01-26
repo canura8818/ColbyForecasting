@@ -96,21 +96,21 @@ model_input
     ## Simple feature collection with 334 features and 2 fields
     ## Geometry type: POINT
     ## Dimension:     XY
-    ## Bounding box:  xmin: -73.65473 ymin: 38.86667 xmax: -66.48333 ymax: 40.8686
+    ## Bounding box:  xmin: -73.65773 ymin: 38.86667 xmax: -66.48333 ymax: 40.8686
     ## Geodetic CRS:  WGS 84
     ## # A tibble: 334 × 3
     ##    month class                      geom
     ##    <fct> <fct>               <POINT [°]>
-    ##  1 Jun   presence   (-70.00834 39.29167)
-    ##  2 Jun   presence     (-71.45833 39.825)
-    ##  3 Jun   presence       (-71.00834 39.5)
-    ##  4 Jun   presence     (-70.975 39.85833)
-    ##  5 Jun   presence   (-66.48333 40.46667)
-    ##  6 Jun   presence     (-66.49167 40.575)
-    ##  7 Jun   presence       (-71.175 39.675)
+    ##  1 Jun   presence       (-71.175 39.675)
+    ##  2 Jun   presence   (-70.00834 39.29167)
+    ##  3 Jun   presence     (-66.49167 40.575)
+    ##  4 Jun   presence       (-71.00834 39.5)
+    ##  5 Jun   presence     (-71.45833 39.825)
+    ##  6 Jun   presence     (-70.975 39.85833)
+    ##  7 Jun   presence   (-66.48333 40.46667)
     ##  8 Jun   presence   (-70.14167 39.64167)
-    ##  9 Jun   background (-72.34151 39.20875)
-    ## 10 Jun   background (-67.65248 40.36045)
+    ##  9 Jun   background (-71.84793 39.70234)
+    ## 10 Jun   background (-71.60114 40.11365)
     ## # ℹ 324 more rows
 
 ``` r
@@ -125,21 +125,21 @@ variables
     ## Simple feature collection with 334 features and 12 fields
     ## Geometry type: POINT
     ## Dimension:     XY
-    ## Bounding box:  xmin: -73.65473 ymin: 38.86667 xmax: -66.48333 ymax: 40.8686
+    ## Bounding box:  xmin: -73.65773 ymin: 38.86667 xmax: -66.48333 ymax: 40.8686
     ## Geodetic CRS:  WGS 84
     ## # A tibble: 334 × 13
-    ##    .id   month class      depth   MLD  Sbtm   SSS   SST  Tbtm        U         V
-    ##    <chr> <fct> <fct>      <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>    <dbl>     <dbl>
-    ##  1 p001  Jun   presence   2628.  4.37  35.0  32.5  17.7  3.23 -0.0374  -0.000418
-    ##  2 p002  Jun   presence    972.  3.04  34.9  31.5  16.6  4.42 -0.0282  -0.0172  
-    ##  3 p003  Jun   presence   2346.  3.86  35.0  32.1  17.2  3.50 -0.126   -0.0322  
-    ##  4 p004  Jun   presence    941.  3.11  34.9  31.6  16.4  4.45 -0.00356 -0.00145 
-    ##  5 p005  Jun   presence   2550.  3.63  35.0  31.8  14.5  3.39 -0.0468  -0.0496  
-    ##  6 p006  Jun   presence   2068.  3.31  35.0  31.6  14.0  3.70 -0.0534  -0.108   
-    ##  7 p007  Jun   presence   1894.  3.39  35.0  31.8  16.9  3.77 -0.0394  -0.0420  
-    ##  8 p008  Jun   presence   2210.  3.52  35.0  32.0  16.7  3.55 -0.0985  -0.00973 
-    ##  9 p009  Jun   background  574.  3.20  34.9  31.7  17.3  5.29 -0.0147  -0.0178  
-    ## 10 p010  Jun   background  598.  3.09  34.9  31.3  14.2  5.22 -0.0208  -0.0114  
+    ##    .id   month class       depth   MLD  Sbtm   SSS   SST  Tbtm        U        V
+    ##    <chr> <fct> <fct>       <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>    <dbl>    <dbl>
+    ##  1 p001  Jun   presence   1894.   3.39  35.0  31.8  16.9  3.77 -0.0394  -4.20e-2
+    ##  2 p002  Jun   presence   2628.   4.37  35.0  32.5  17.7  3.23 -0.0374  -4.18e-4
+    ##  3 p003  Jun   presence   2068.   3.31  35.0  31.6  14.0  3.70 -0.0534  -1.08e-1
+    ##  4 p004  Jun   presence   2346.   3.86  35.0  32.1  17.2  3.50 -0.126   -3.22e-2
+    ##  5 p005  Jun   presence    972.   3.04  34.9  31.5  16.6  4.42 -0.0282  -1.72e-2
+    ##  6 p006  Jun   presence    941.   3.11  34.9  31.6  16.4  4.45 -0.00356 -1.45e-3
+    ##  7 p007  Jun   presence   2550.   3.63  35.0  31.8  14.5  3.39 -0.0468  -4.96e-2
+    ##  8 p008  Jun   presence   2210.   3.52  35.0  32.0  16.7  3.55 -0.0985  -9.73e-3
+    ##  9 p009  Jun   background  484.   2.83  34.9  31.4  16.6  5.79 -0.00587 -6.95e-3
+    ## 10 p010  Jun   background   87.8  2.78  33.5  30.9  16.1  8.30 -0.00604 -8.10e-3
     ## # ℹ 324 more rows
     ## # ℹ 2 more variables: Xbtm <dbl>, geom <POINT [°]>
 
