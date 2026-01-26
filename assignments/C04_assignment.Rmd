@@ -1,0 +1,165 @@
+---
+title: "Second Species Model"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+source("/home/canura26/ColbyForecasting/setup.R")
+for (f in list.files("/home/canura26/ColbyForecasting/functions",
+     pattern = glob2rx("*.R"), full.names = TRUE)){
+  source(f)
+}
+
+SPECIES = "Galeocerdo cuvier"
+```
+
+```{r load_data}
+cfg = read_configuration(scientificname = SPECIES, version = "v1")
+model_input = read_model_input(scientificname = SPECIES, 
+                               version = "v1",
+                               log_me = c("depth", "Xbtm")) |>
+  dplyr::mutate(month = month_as_number(.data$month)) |>
+  select(all_of(c("class", cfg$keep)))
+```
+
+```{r initial_split}
+model_input_split = spatial_initial_split(model_input, 
+                        prop = 1 / 5,     # 20% for testing
+                        strategy = spatial_block_cv) # see ?spatial_block_cv
+model_input_split
+```
+
+```{r initial_split_plot}
+autoplot(model_input_split)
+```
+
+```{r cv_training}
+tr_data = training(model_input_split)
+cv_tr_data <- spatial_block_cv(tr_data,
+  v = 5,     
+  cellsize = grid_cellsize(model_input),
+  offset = grid_offset(model_input) + 0.00001
+)
+autoplot(cv_tr_data)
+```
+
+```{r recipe}
+one_row_of_training_data = dplyr::slice(tr_data,1)
+rec = recipe(one_row_of_training_data, formula = class ~ .)
+rec
+```
+
+```{r recipe_summary}
+summary(rec)
+```
+
+```{r make_workflow}
+wflow = workflow_set(
+  
+  preproc = list(default = rec), # not much happening in our preprocessor
+  
+  models = list(                 # but we have 4 models to add
+    
+      # very simple - nothing to tune
+      glm = logistic_reg(
+          mode = "classification") |>
+        set_engine("glm"),
+      
+      # two knobs to tune
+      rf = rand_forest(
+          mtry = tune(),
+          trees = tune(),
+          mode = "classification") |>
+        set_engine("ranger", 
+                   importance = "impurity"),
+      
+      # so many things to tune!
+      btree = boost_tree(
+          mtry = tune(), 
+          trees = tune(), 
+          tree_depth = tune(), 
+          learn_rate = tune(), 
+          loss_reduction = tune(), 
+          stop_iter = tune(),
+          mode = "classification") |>
+        set_engine("xgboost"),
+    
+      # just two again
+      maxent = maxent(
+          feature_classes = tune(),
+          regularization_multiplier = tune(),
+          mode = "classification") |>
+        set_engine("maxnet")
+  )
+)
+wflow
+```
+
+```{r metrics}
+metrics = sdm_metric_set(yardstick::accuracy)
+metrics
+```
+
+```{r fit, warning = FALSE}
+wflow <- wflow |>
+  workflow_map("tune_grid",
+    resamples = cv_tr_data, 
+    grid = 3,
+    metrics = metrics, 
+    verbose = TRUE)
+```
+
+```{r plot_wflow}
+autoplot(wflow)
+```
+
+```{r select_best}
+model_fits = workflowset_selectomatic(wflow, model_input_split,
+                                  filename = "Galeocerdo_cuvier-v1-model_fits",
+                                  path = data_path("models"))
+model_fits
+```
+
+```{r model_fit_metrics}
+model_fit_metrics(model_fits)
+```
+
+```{r model_fit_confmat}
+model_fit_confmat(model_fits)
+```
+
+```{r model_fit_roc_auc}
+model_fit_roc_auc(model_fits)
+```
+
+```{r model_fit_vip}
+model_fit_varimp_plot(model_fits)
+```
+
+```{r random_forest}
+rf = model_fits |>
+  filter(wflow_id == "default_rf")
+rf
+```
+
+```{r rf_splits}
+autoplot(rf$splits[[1]])
+```
+
+```{r rf_metrics}
+rf$.metrics[[1]]
+```
+
+```{r rf_preds}
+rf$.predictions[[1]]
+```
+
+```{r rf_workflow}
+rf$.workflow[[1]]
+```
+
+```{r pd_plot}
+model_fit_pdp(model_fits, wid = "default_btree", title = "Boosted Tree")
+```

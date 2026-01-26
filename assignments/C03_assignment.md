@@ -2,16 +2,6 @@ Second Species
 ================
 
 ``` r
-source("/home/canura26/ColbyForecasting/setup.R")
-for (f in list.files("/home/canura26/ColbyForecasting/functions",
-     pattern = glob2rx("*.R"), full.names = TRUE)){
-  source(f)
-}
-
-SPECIES = "Galeocerdo cuvier"
-```
-
-``` r
 obs = read_observations(SPECIES)
 obs
 ```
@@ -101,16 +91,16 @@ model_input
     ## # A tibble: 334 × 3
     ##    month class                      geom
     ##    <fct> <fct>               <POINT [°]>
-    ##  1 Jun   presence       (-71.175 39.675)
-    ##  2 Jun   presence   (-70.00834 39.29167)
-    ##  3 Jun   presence     (-66.49167 40.575)
-    ##  4 Jun   presence       (-71.00834 39.5)
-    ##  5 Jun   presence     (-71.45833 39.825)
-    ##  6 Jun   presence     (-70.975 39.85833)
-    ##  7 Jun   presence   (-66.48333 40.46667)
-    ##  8 Jun   presence   (-70.14167 39.64167)
-    ##  9 Jun   background (-71.84793 39.70234)
-    ## 10 Jun   background (-71.60114 40.11365)
+    ##  1 Jun   presence   (-66.48333 40.46667)
+    ##  2 Jun   presence       (-71.00834 39.5)
+    ##  3 Jun   presence   (-70.14167 39.64167)
+    ##  4 Jun   presence       (-71.175 39.675)
+    ##  5 Jun   presence     (-66.49167 40.575)
+    ##  6 Jun   presence   (-70.00834 39.29167)
+    ##  7 Jun   presence     (-70.975 39.85833)
+    ##  8 Jun   presence     (-71.45833 39.825)
+    ##  9 Jun   background   (-71.6834 39.7846)
+    ## 10 Jun   background (-71.76567 39.62007)
     ## # ℹ 324 more rows
 
 ``` r
@@ -128,18 +118,18 @@ variables
     ## Bounding box:  xmin: -73.65773 ymin: 38.86667 xmax: -66.48333 ymax: 40.8686
     ## Geodetic CRS:  WGS 84
     ## # A tibble: 334 × 13
-    ##    .id   month class       depth   MLD  Sbtm   SSS   SST  Tbtm        U        V
-    ##    <chr> <fct> <fct>       <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>    <dbl>    <dbl>
-    ##  1 p001  Jun   presence   1894.   3.39  35.0  31.8  16.9  3.77 -0.0394  -4.20e-2
-    ##  2 p002  Jun   presence   2628.   4.37  35.0  32.5  17.7  3.23 -0.0374  -4.18e-4
-    ##  3 p003  Jun   presence   2068.   3.31  35.0  31.6  14.0  3.70 -0.0534  -1.08e-1
-    ##  4 p004  Jun   presence   2346.   3.86  35.0  32.1  17.2  3.50 -0.126   -3.22e-2
-    ##  5 p005  Jun   presence    972.   3.04  34.9  31.5  16.6  4.42 -0.0282  -1.72e-2
-    ##  6 p006  Jun   presence    941.   3.11  34.9  31.6  16.4  4.45 -0.00356 -1.45e-3
-    ##  7 p007  Jun   presence   2550.   3.63  35.0  31.8  14.5  3.39 -0.0468  -4.96e-2
-    ##  8 p008  Jun   presence   2210.   3.52  35.0  32.0  16.7  3.55 -0.0985  -9.73e-3
-    ##  9 p009  Jun   background  484.   2.83  34.9  31.4  16.6  5.79 -0.00587 -6.95e-3
-    ## 10 p010  Jun   background   87.8  2.78  33.5  30.9  16.1  8.30 -0.00604 -8.10e-3
+    ##    .id   month class      depth   MLD  Sbtm   SSS   SST  Tbtm        U         V
+    ##    <chr> <fct> <fct>      <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>    <dbl>     <dbl>
+    ##  1 p001  Jun   presence   2550.  3.63  35.0  31.8  14.5  3.39 -0.0468  -0.0496  
+    ##  2 p002  Jun   presence   2346.  3.86  35.0  32.1  17.2  3.50 -0.126   -0.0322  
+    ##  3 p003  Jun   presence   2210.  3.52  35.0  32.0  16.7  3.55 -0.0985  -0.00973 
+    ##  4 p004  Jun   presence   1894.  3.39  35.0  31.8  16.9  3.77 -0.0394  -0.0420  
+    ##  5 p005  Jun   presence   2068.  3.31  35.0  31.6  14.0  3.70 -0.0534  -0.108   
+    ##  6 p006  Jun   presence   2628.  4.37  35.0  32.5  17.7  3.23 -0.0374  -0.000418
+    ##  7 p007  Jun   presence    941.  3.11  34.9  31.6  16.4  4.45 -0.00356 -0.00145 
+    ##  8 p008  Jun   presence    972.  3.04  34.9  31.5  16.6  4.42 -0.0282  -0.0172  
+    ##  9 p009  Jun   background  617.  2.86  34.9  31.4  16.5  5.07 -0.00287 -0.00633 
+    ## 10 p010  Jun   background 1115.  3.04  34.9  31.7  16.9  4.26 -0.0243  -0.0265  
     ## # ℹ 324 more rows
     ## # ℹ 2 more variables: Xbtm <dbl>, geom <POINT [°]>
 

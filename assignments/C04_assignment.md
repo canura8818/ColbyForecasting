@@ -2,16 +2,6 @@ Second Species Model
 ================
 
 ``` r
-source("/home/canura26/ColbyForecasting/setup.R")
-for (f in list.files("/home/canura26/ColbyForecasting/functions",
-     pattern = glob2rx("*.R"), full.names = TRUE)){
-  source(f)
-}
-
-SPECIES = "Galeocerdo cuvier"
-```
-
-``` r
 cfg = read_configuration(scientificname = SPECIES, version = "v1")
 model_input = read_model_input(scientificname = SPECIES, 
                                version = "v1",
@@ -28,7 +18,7 @@ model_input_split
 ```
 
     ## <Training/Testing/Total>
-    ## <217/117/334>
+    ## <243/91/334>
 
 ``` r
 autoplot(model_input_split)
@@ -162,13 +152,13 @@ wflow <- wflow |>
 
     ## i 1 of 4 resampling: default_glm
 
-    ## ✔ 1 of 4 resampling: default_glm (748ms)
+    ## ✔ 1 of 4 resampling: default_glm (717ms)
 
     ## i 2 of 4 tuning:     default_rf
 
     ## i Creating pre-processing data to finalize 1 unknown parameter: "mtry"
 
-    ## ✔ 2 of 4 tuning:     default_rf (5.3s)
+    ## ✔ 2 of 4 tuning:     default_rf (5.4s)
 
     ## i 3 of 4 tuning:     default_btree
 
@@ -177,8 +167,8 @@ wflow <- wflow |>
     ## → A | warning: `early_stop` was reduced to 0.
 
     ## There were issues with some computations   A: x1                                                 → B | warning: the standard deviation is zero
-    ## There were issues with some computations   A: x1There were issues with some computations   A: x2   B: x1There were issues with some computations   A: x3   B: x1There were issues with some computations   A: x4   B: x2There were issues with some computations   A: x5   B: x2There were issues with some computations   A: x6   B: x3There were issues with some computations   A: x7   B: x3There were issues with some computations   A: x8   B: x4There were issues with some computations   A: x9   B: x4There were issues with some computations   A: x10   B: x5There were issues with some computations   A: x10   B: x5
-    ## ✔ 3 of 4 tuning:     default_btree (11.1s)
+    ## There were issues with some computations   A: x1There were issues with some computations   A: x2   B: x1There were issues with some computations   A: x3   B: x1There were issues with some computations   A: x4   B: x2There were issues with some computations   A: x5   B: x2There were issues with some computations   A: x6   B: x3There were issues with some computations   A: x7   B: x3There were issues with some computations   A: x8   B: x4There were issues with some computations   A: x10   B: x5There were issues with some computations   A: x10   B: x5
+    ## ✔ 3 of 4 tuning:     default_btree (11.8s)
     ## i 4 of 4 tuning:     default_maxent
     ## ✔ 4 of 4 tuning:     default_maxent (2.1s)
 
@@ -195,16 +185,23 @@ autoplot(wflow)
 model_fits = workflowset_selectomatic(wflow, model_input_split,
                                   filename = "Galeocerdo_cuvier-v1-model_fits",
                                   path = data_path("models"))
+```
+
+    ## → A | warning: `early_stop` was reduced to 0.
+
+    ## There were issues with some computations   A: x1There were issues with some computations   A: x1
+
+``` r
 model_fits
 ```
 
     ## # A tibble: 4 × 7
-    ##   wflow_id     splits            id    .metrics .notes   .predictions .workflow 
-    ##   <chr>        <list>            <chr> <list>   <list>   <list>       <list>    
-    ## 1 default_glm  <split [217/117]> trai… <tibble> <tibble> <tibble>     <workflow>
-    ## 2 default_rf   <split [217/117]> trai… <tibble> <tibble> <tibble>     <workflow>
-    ## 3 default_btr… <split [217/117]> trai… <tibble> <tibble> <tibble>     <workflow>
-    ## 4 default_max… <split [217/117]> trai… <tibble> <tibble> <tibble>     <workflow>
+    ##   wflow_id      splits           id    .metrics .notes   .predictions .workflow 
+    ##   <chr>         <list>           <chr> <list>   <list>   <list>       <list>    
+    ## 1 default_glm   <split [243/91]> trai… <tibble> <tibble> <tibble>     <workflow>
+    ## 2 default_rf    <split [243/91]> trai… <tibble> <tibble> <tibble>     <workflow>
+    ## 3 default_btree <split [243/91]> trai… <tibble> <tibble> <tibble>     <workflow>
+    ## 4 default_maxe… <split [243/91]> trai… <tibble> <tibble> <tibble>     <workflow>
 
 ``` r
 model_fit_metrics(model_fits)
@@ -213,10 +210,10 @@ model_fit_metrics(model_fits)
     ## # A tibble: 4 × 5
     ##   wflow_id       accuracy boyce_cont roc_auc tss_max
     ##   <chr>             <dbl>      <dbl>   <dbl>   <dbl>
-    ## 1 default_glm       0.692      0.690   0.632   0.216
-    ## 2 default_rf        0.658      0.686   0.648   0.322
-    ## 3 default_btree     0.632      0.569   0.627   0.289
-    ## 4 default_maxent    0.556      0.610   0.624   0.284
+    ## 1 default_glm       0.714      0.536   0.678   0.298
+    ## 2 default_rf        0.703      0.480   0.621   0.258
+    ## 3 default_btree     0.725      0.543   0.634   0.275
+    ## 4 default_maxent    0.571      0.535   0.667   0.315
 
 ``` r
 model_fit_confmat(model_fits)
@@ -243,9 +240,9 @@ rf
 ```
 
     ## # A tibble: 1 × 7
-    ##   wflow_id   splits            id      .metrics .notes   .predictions .workflow 
-    ##   <chr>      <list>            <chr>   <list>   <list>   <list>       <list>    
-    ## 1 default_rf <split [217/117]> train/… <tibble> <tibble> <tibble>     <workflow>
+    ##   wflow_id   splits           id       .metrics .notes   .predictions .workflow 
+    ##   <chr>      <list>           <chr>    <list>   <list>   <list>       <list>    
+    ## 1 default_rf <split [243/91]> train/t… <tibble> <tibble> <tibble>     <workflow>
 
 ``` r
 autoplot(rf$splits[[1]])
@@ -260,29 +257,29 @@ rf$.metrics[[1]]
     ## # A tibble: 4 × 4
     ##   .metric    .estimator .estimate .config        
     ##   <chr>      <chr>          <dbl> <chr>          
-    ## 1 accuracy   binary         0.658 pre0_mod0_post0
-    ## 2 boyce_cont binary         0.686 pre0_mod0_post0
-    ## 3 roc_auc    binary         0.648 pre0_mod0_post0
-    ## 4 tss_max    binary         0.322 pre0_mod0_post0
+    ## 1 accuracy   binary         0.703 pre0_mod0_post0
+    ## 2 boyce_cont binary         0.480 pre0_mod0_post0
+    ## 3 roc_auc    binary         0.621 pre0_mod0_post0
+    ## 4 tss_max    binary         0.258 pre0_mod0_post0
 
 ``` r
 rf$.predictions[[1]]
 ```
 
-    ## # A tibble: 117 × 6
+    ## # A tibble: 91 × 6
     ##    class      .pred_class .pred_presence .pred_background  .row .config        
     ##    <fct>      <fct>                <dbl>            <dbl> <int> <chr>          
-    ##  1 presence   background          0.203             0.797     1 pre0_mod0_post0
-    ##  2 presence   background          0.0406            0.959     5 pre0_mod0_post0
-    ##  3 presence   background          0.0596            0.940     6 pre0_mod0_post0
-    ##  4 background background          0.0611            0.939    10 pre0_mod0_post0
-    ##  5 background background          0.169             0.831    11 pre0_mod0_post0
-    ##  6 background background          0.126             0.874    13 pre0_mod0_post0
-    ##  7 background background          0.235             0.765    14 pre0_mod0_post0
-    ##  8 background background          0.127             0.873    16 pre0_mod0_post0
-    ##  9 background background          0.0784            0.922    17 pre0_mod0_post0
-    ## 10 background background          0.0216            0.978    18 pre0_mod0_post0
-    ## # ℹ 107 more rows
+    ##  1 presence   presence            0.620             0.380     1 pre0_mod0_post0
+    ##  2 presence   background          0.247             0.753     4 pre0_mod0_post0
+    ##  3 presence   background          0.0425            0.958     7 pre0_mod0_post0
+    ##  4 presence   background          0.0103            0.990     8 pre0_mod0_post0
+    ##  5 background background          0.0417            0.958     9 pre0_mod0_post0
+    ##  6 background background          0.0525            0.948    18 pre0_mod0_post0
+    ##  7 background presence            0.620             0.380    19 pre0_mod0_post0
+    ##  8 background background          0.0358            0.964    22 pre0_mod0_post0
+    ##  9 background background          0.0417            0.958    23 pre0_mod0_post0
+    ## 10 background background          0.0588            0.941    25 pre0_mod0_post0
+    ## # ℹ 81 more rows
 
 ``` r
 rf$.workflow[[1]]
@@ -303,13 +300,13 @@ rf$.workflow[[1]]
     ## 
     ## Type:                             Probability estimation 
     ## Number of trees:                  1000 
-    ## Sample size:                      217 
+    ## Sample size:                      243 
     ## Number of independent variables:  9 
     ## Mtry:                             9 
     ## Target node size:                 10 
     ## Variable importance mode:         impurity 
     ## Splitrule:                        gini 
-    ## OOB prediction error (Brier s.):  0.2711682
+    ## OOB prediction error (Brier s.):  0.2822323
 
 ``` r
 model_fit_pdp(model_fits, wid = "default_btree", title = "Boosted Tree")

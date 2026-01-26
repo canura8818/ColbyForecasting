@@ -3,14 +3,16 @@ title: "Second Species"
 output: github_document
 ---
 
-```{r setup}
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
 source("/home/canura26/ColbyForecasting/setup.R")
 for (f in list.files("/home/canura26/ColbyForecasting/functions",
      pattern = glob2rx("*.R"), full.names = TRUE)){
   source(f)
 }
 
-SPECIES = "Aurelia aurita"
+SPECIES = "Galeocerdo cuvier"
 ```
 
 ```{r read_obs}
