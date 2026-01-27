@@ -1,0 +1,128 @@
+---
+title: "Second Species Prediction"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+source("/home/canura26/ColbyForecasting/setup.R")
+for (f in list.files("/home/canura26/ColbyForecasting/functions",
+     pattern = glob2rx("*.R"), full.names = TRUE)){
+  source(f)
+}
+
+SPECIES = "Galeocerdo cuvier"
+```
+
+```{r load_covar}
+cfg = read_configuration(scientificname = SPECIES,
+                         version = "v1", 
+                         path = data_path("models"))
+db = brickman_database()
+db = brickman_database()
+present_conditions = read_brickman(db |> filter(scenario == "PRESENT", 
+                                                interval == "mon"),
+                       add = c("depth", "month")) |>
+  select(all_of(cfg$keep_vars))
+```
+
+```{r load_workflow}
+model_fits = read_model_fit(filename = "Galeocerdo_cuvier-v1-model_fits")
+model_fits
+```
+
+```{r nowcast}
+nowcast = predict_stars(model_fits, present_conditions)
+nowcast
+```
+
+```{r plot_nowcast_maxent, warning = FALSE}
+plot_prediction(nowcast['default_btree'])
+```
+
+```{r plot_class_labels, warning = FALSE}
+pa_nowcast = threshold_prediction(nowcast)
+plot_prediction(pa_nowcast['default_btree'])
+```
+
+```{r load_2075_RCP85, warning = FALSE}
+covars_rcp85_2075 = read_brickman(db |> filter(scenario == "RCP85", 
+                                               year == 2075, 
+                                               interval == "mon"),
+                                  add = c("depth", "month")) |>
+  select(all_of(cfg$keep_vars))
+```
+
+```{r load_2055_RCP85, warning = FALSE}
+covars_rcp85_2055 = read_brickman(db |> filter(scenario == "RCP85", 
+                                               year == 2055, 
+                                               interval == "mon"),
+                                  add = c("depth", "month")) |>
+  select(all_of(cfg$keep_vars))
+```
+
+```{r load_2075_RCP45, warning = FALSE}
+covars_rcp45_2075 = read_brickman(db |> filter(scenario == "RCP45", 
+                                               year == 2075, 
+                                               interval == "mon"),
+                                  add = c("depth", "month")) |>
+  select(all_of(cfg$keep_vars))
+```
+
+```{r load_2055_RCP45, warning = FALSE}
+covars_rcp45_2055 = read_brickman(db |> filter(scenario == "RCP45", 
+                                               year == 2055, 
+                                               interval == "mon"),
+                                  add = c("depth", "month")) |>
+  select(all_of(cfg$keep_vars))
+```
+
+```{r forecast}
+rcp85_2075 = predict_stars(model_fits, covars_rcp85_2075)
+
+rcp85_2055 = predict_stars(model_fits, covars_rcp85_2055)
+
+rcp45_2075 = predict_stars(model_fits, covars_rcp45_2075)
+
+rcp45_2055 = predict_stars(model_fits, covars_rcp45_2055)
+```
+
+```{r plot_forecast, warning = FALSE}
+plot_prediction(forecast_2075['default_btree'])
+```
+
+```{r save_pred}
+# make sure the output directory exists
+path = make_path("predictions")
+
+write_prediction(nowcast,
+                 scientificname = cfg$scientificname,
+                 version = cfg$version,
+                 year = "CURRENT",
+                 scenario = "CURRENT")
+
+write_prediction(rcp85_2075,
+                 scientificname = cfg$scientificname,
+                 version = cfg$version,
+                 year = "2075",
+                 scenario = "RCP85")
+
+write_prediction(rcp85_2055,
+                 scientificname = cfg$scientificname,
+                 version = cfg$version,
+                 year = "2055",
+                 scenario = "RCP85")
+
+write_prediction(rcp45_2075,
+                 scientificname = cfg$scientificname,
+                 version = cfg$version,
+                 year = "2075",
+                 scenario = "RCP45")
+
+write_prediction(rcp45_2055,
+                 scientificname = cfg$scientificname,
+                 version = cfg$version,
+                 year = "2055",
+                 scenario = "RCP45")
+```

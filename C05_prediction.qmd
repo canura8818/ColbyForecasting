@@ -13,6 +13,7 @@ As always, we start by running our setup function. Start RStudio/R, and reload y
 
 ```{r setup}
 source("setup.R")
+SPECIES = "Dermochelys coriacea"
 ```
 
 # Load the Brickman data
@@ -20,7 +21,7 @@ source("setup.R")
 We are going to make a prediction about the present, which means it something akin to a [nowcast](https://en.wikipedia.org/wiki/Nowcasting_(economics)). 
 
 ```{r load_covar}
-cfg = read_configuration(scientificname = "Mola mola",
+cfg = read_configuration(scientificname = SPECIES,
                          version = "v1", 
                          path = data_path("models"))
 db = brickman_database()
@@ -36,7 +37,7 @@ present_conditions = read_brickman(db |> filter(scenario == "PRESENT",
 We read the model information we created last time.
 
 ```{r load_workflow}
-model_fits = read_model_fit(filename = "Mola_mola-v1-model_fits")
+model_fits = read_model_fit(filename = "Dermochelys_coriacea-v1-model_fits")
 model_fits
 ```
 
@@ -56,14 +57,14 @@ nowcast
 Now we can plot what is often called a "habitat suitability index" (hsi) map. We can 
 
 ```{r plot_nowcast_maxent, warning = FALSE}
-plot_prediction(nowcast['default_btree'])
+plot_prediction(nowcast['default_rf'])
 ```
 
 We can also plot a presence/absence labeled map, but keep in mind it is just a thresholded version of the above where "presence" means `prediction >= 0.5`. Of course, you can select other values to threshold the habitat suitablility scores.
 
 ```{r plot_class_labels, warning = FALSE}
 pa_nowcast = threshold_prediction(nowcast)
-plot_prediction(pa_nowcast['default_btree'])
+plot_prediction(pa_nowcast['default_rf'])
 ```
 
 ## Forecast
@@ -84,7 +85,7 @@ forecast_2075
 ```
 
 ```{r plot_forecast, warning = FALSE}
-plot_prediction(forecast_2075['default_btree'])
+plot_prediction(forecast_2075['default_rf'])
 ```
 
 
