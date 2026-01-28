@@ -114,9 +114,10 @@ rcp45_2055 = predict_stars(model_fits, covars_rcp45_2055)
 ```
 
 ```{r plot_forecast, warning = FALSE}
-plot_prediction(rcp85_2075['default_rf']) + 
+p <- plot_prediction(rcp85_2075['default_rf']) + 
   ggplot2::ggtitle("Prediction for RCP8.5 in 2075") +
   ggplot2::facet_wrap(~month, nrow = 1)
+ggsave("rcp85_2075_monthly.png", plot = p, width = 24, height = 5, units = "in")
 
 plot_prediction(rcp85_2055['default_rf']) + 
   ggplot2::ggtitle("Prediction for RCP8.5 in 2055")

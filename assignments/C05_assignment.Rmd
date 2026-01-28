@@ -54,6 +54,7 @@ covars_rcp85_2075 = read_brickman(db |> filter(scenario == "RCP85",
   select(all_of(cfg$keep_vars))
 ```
 
+<<<<<<< HEAD
 ```{r load_2055_RCP85, warning = FALSE}
 covars_rcp85_2055 = read_brickman(db |> filter(scenario == "RCP85", 
                                                year == 2055, 
