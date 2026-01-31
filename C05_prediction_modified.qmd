@@ -76,6 +76,7 @@ covars_rcp85_2075 = read_brickman(db |> filter(scenario == "RCP85",
                                                year == 2075, 
                                                interval == "mon"),
                                   add = c("depth", "month")) |>
+  mutate(depth = log10(depth)) |>
   select(all_of(cfg$keep_vars))
 ```
 
@@ -84,6 +85,7 @@ covars_rcp85_2055 = read_brickman(db |> filter(scenario == "RCP85",
                                                year == 2055, 
                                                interval == "mon"),
                                   add = c("depth", "month")) |>
+  mutate(depth = log10(depth)) |>
   select(all_of(cfg$keep_vars))
 ```
 
@@ -92,6 +94,7 @@ covars_rcp45_2075 = read_brickman(db |> filter(scenario == "RCP45",
                                                year == 2075, 
                                                interval == "mon"),
                                   add = c("depth", "month")) |>
+  mutate(depth = log10(depth)) |>
   select(all_of(cfg$keep_vars))
 ```
 
@@ -100,6 +103,7 @@ covars_rcp45_2055 = read_brickman(db |> filter(scenario == "RCP45",
                                                year == 2055, 
                                                interval == "mon"),
                                   add = c("depth", "month")) |>
+  mutate(depth = log10(depth)) |>
   select(all_of(cfg$keep_vars))
 ```
 
@@ -114,19 +118,23 @@ rcp45_2055 = predict_stars(model_fits, covars_rcp45_2055)
 ```
 
 ```{r plot_forecast, warning = FALSE}
-p <- plot_prediction(rcp85_2075['default_rf']) + 
+plot_prediction(rcp85_2075['default_rf']) + 
   ggplot2::ggtitle("Prediction for RCP8.5 in 2075") +
-  ggplot2::facet_wrap(~month, nrow = 1)
-ggsave("rcp85_2075_monthly.png", plot = p, width = 24, height = 5, units = "in")
+  ggplot2::facet_wrap(~month)
 
-plot_prediction(rcp85_2055['default_rf']) + 
-  ggplot2::ggtitle("Prediction for RCP8.5 in 2055")
+p2 <- plot_prediction(rcp85_2055['default_rf']) + 
+  ggplot2::ggtitle("Prediction for RCP8.5 in 2055") +
+  ggplot2::facet_wrap(~month, nrow = 1)
+ggsave("rcp85_2055_monthly.png", plot = p2, width = 24, height = 5, units = "in")
 
 plot_prediction(rcp45_2075['default_rf']) + 
-  ggplot2::ggtitle("Prediction for RCP4.5 in 2075")
+  ggplot2::ggtitle("Prediction for RCP4.5 in 2075") +
+  ggplot2::facet_wrap(~month)
 
-plot_prediction(rcp45_2055['default_rf']) + 
-  ggplot2::ggtitle("Prediction for RCP4.5 in 2055")
+p4 <- plot_prediction(rcp45_2055['default_rf']) + 
+  ggplot2::ggtitle("Prediction for RCP4.5 in 2055") +
+  ggplot2::facet_wrap(~month, nrow = 1)
+ggsave("rcp45_2055_monthly.png", plot = p4, width = 24, height = 5, units = "in")
 ```
 
 
@@ -140,7 +148,7 @@ It's easy to save the predictions (and read then back with `read_prediction()`).
 
 ```{r save_pred}
 # make sure the output directory exists
-path = make_path("predictions")
+path = make_path("ColbyForecasting/predictions")
 
 write_prediction(nowcast,
                  scientificname = cfg$scientificname,

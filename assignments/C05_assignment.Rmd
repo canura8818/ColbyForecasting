@@ -51,6 +51,7 @@ covars_rcp85_2075 = read_brickman(db |> filter(scenario == "RCP85",
                                                year == 2075, 
                                                interval == "mon"),
                                   add = c("depth", "month")) |>
+  mutate(depth = log10(depth)) |>
   select(all_of(cfg$keep_vars))
 ```
 
@@ -60,6 +61,7 @@ covars_rcp85_2055 = read_brickman(db |> filter(scenario == "RCP85",
                                                year == 2055, 
                                                interval == "mon"),
                                   add = c("depth", "month")) |>
+  mutate(depth = log10(depth)) |>
   select(all_of(cfg$keep_vars))
 ```
 
@@ -68,6 +70,7 @@ covars_rcp45_2075 = read_brickman(db |> filter(scenario == "RCP45",
                                                year == 2075, 
                                                interval == "mon"),
                                   add = c("depth", "month")) |>
+  mutate(depth = log10(depth)) |>
   select(all_of(cfg$keep_vars))
 ```
 
@@ -76,6 +79,7 @@ covars_rcp45_2055 = read_brickman(db |> filter(scenario == "RCP45",
                                                year == 2055, 
                                                interval == "mon"),
                                   add = c("depth", "month")) |>
+  mutate(depth = log10(depth)) |>
   select(all_of(cfg$keep_vars))
 ```
 
